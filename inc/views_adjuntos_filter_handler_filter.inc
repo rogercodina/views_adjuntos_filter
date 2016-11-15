@@ -16,12 +16,28 @@ class views_adjuntos_filter_handler_filter extends views_plugin_exposed_form_bas
     return FALSE;
   }
 
+  function can_group() {
+    return TRUE;
+  }
+
   function is_exposed() {
     return TRUE;
   }
 
   function access() {
     return TRUE;
+  }
+
+  function has_extra_options() {
+    return FALSE;
+  }
+
+  function ui_name() {
+    return 'Views exposed form';
+  }
+
+  function admin_summary() {
+    return 'Exposed: ¿Tiene documento adjunto?';
   }
 
   function pre_query() {}
@@ -43,6 +59,15 @@ class views_adjuntos_filter_handler_filter extends views_plugin_exposed_form_bas
   }
 
   function store_exposed_input($input, $status) {}
+
+  /**
+   * Filter configuration form.
+   */
+  function options_form(&$form, &$form_state) {
+    $form['markup'] = array(
+      '#markup' => '<div class="form-item description">' . t('This filter needs no configuration. It is always exposed.') . '</div>',
+    );
+  }
 
   /**
    * Exposed filter rendering.
