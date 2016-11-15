@@ -29,7 +29,7 @@ function views_adjuntos_filter_views_api() {
 function views_adjuntos_filter_views_data() {
   $data = array();
 
-  $data['views']['adjuntos_filter'] = array(
+  $data['views']['field_documentos_adjuntos'] = array(
     'group' => t('Custom'),
     'title' => t('¿Tiene documento adjunto?'),
     'help' => t('Allows to filter content with attached documents or without them.'),

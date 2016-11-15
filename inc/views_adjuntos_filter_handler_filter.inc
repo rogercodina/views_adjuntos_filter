@@ -1,78 +1,21 @@
 <?php
 
-class views_adjuntos_filter_handler_filter extends views_plugin_exposed_form_basic {
+class views_adjuntos_filter_handler_filter extends views_handler_filter {
+
+  function can_expose() { return TRUE; }
 
   /**
-   * Implements views_handler_filter#can_expose().
+   * Implements views_object#admin_summary().
    */
-  function can_expose() {
-    return TRUE;
-  }
-
-  /**
-   * Implements views_handler_filter#is_a_group().
-   */
-  function is_a_group() {
-    return FALSE;
-  }
-
-  function can_group() {
-    return TRUE;
-  }
-
-  function is_exposed() {
-    return TRUE;
-  }
-
-  function access() {
-    return TRUE;
-  }
-
-  function has_extra_options() {
-    return FALSE;
-  }
-
-  function ui_name() {
-    return 'Views exposed form';
-  }
-
   function admin_summary() {
-    return 'Exposed: ¿Tiene documento adjunto?';
-  }
-
-  function pre_query() {}
-
-  /**
-   * Check to see if input from the exposed filters should change
-   * the behavior of this filter.
-   */
-  function accept_exposed_input($input) {
-    return FALSE; 
+    return t('Exposed: ¿Tiene documento adjunto?');
   }
 
   /**
-   * Returns TRUE if users can select multiple groups items of a
-   * grouped exposed filter.
+   * Options form subform for setting exposed filter options.
    */
-  function multiple_exposed_input() {
-    return FALSE;
-  }
-
-  function store_exposed_input($input, $status) {}
-
-  /**
-   * Filter configuration form.
-   */
-  function options_form(&$form, &$form_state) {
-    $form['markup'] = array(
-      '#markup' => '<div class="form-item description">' . t('This filter needs no configuration. It is always exposed.') . '</div>',
-    );
-  }
-
-  /**
-   * Exposed filter rendering.
-   */
-  function exposed_form(&$form, &$form_state) {
+  function value_form(&$form, &$form_state) {
+    parent::value_form($form, $form_state);
 
     $form['has_doc_attached'] = array(
        '#type' => 'select',
@@ -82,51 +25,15 @@ class views_adjuntos_filter_handler_filter extends views_plugin_exposed_form_bas
           0 => t('No'),
           1 => t('Yes'),
        ),
-       //'#default_value' => $form_state['values'],
+       '#default_value' => !empty($form_state['values']['has_doc_attached'])
     );
   }
 
   /**
-   * Exposed filter validation.
+   * Alters Views query when filter is used.
+   * Nomes s'executa si el filtre no es exposat.
+   * Per aixo hem implementat el hook_views_query_alter a l'altre fitxer.
    */
-  function exposed_validate(&$form, &$form_state) {
-    
-  }
-
-  /**
-   * Exposed filter submit.
-   */
-  function exposed_submit(&$form, &$form_state) {
-    
-  }
-
-  /**
-   * Tell the renderer about our exposed form. This only needs to be
-   * overridden for particularly complex forms. And maybe not even then.
-   *
-   * @return array|null
-   *   For standard exposed filters. An array with the following keys:
-   *   - operator: The $form key of the operator. Set to NULL if no operator.
-   *   - value: The $form key of the value. Set to NULL if no value.
-   *   - label: The label to use for this piece.
-   *   For grouped exposed filters. An array with the following keys:
-   *   - value: The $form key of the value. Set to NULL if no value.
-   *   - label: The label to use for this piece.
-   */
-  function exposed_info() {
-    return array(
-      'operator' => NULL,
-      'value' => 'has_doc_attached',
-      'label' => '¿Tiene documento adjunto?',
-      'description' => '',
-    );
-  }
-
-  /**
-   * Add this filter to the query.
-   *
-   * See hook_views_query_alter.
-   */
-  /*function query() { //$this->query... }*/
+  /*function query() {}*/
 
 }
