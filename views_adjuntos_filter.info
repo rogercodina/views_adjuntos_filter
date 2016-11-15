@@ -1,0 +1,7 @@
+name = Views documentos adjuntos exposed filter
+description = Allows users to filter content with attached documents or without them
+version = "7.x-1.0"
+core = "7.x"
+package = Drauta
+
+files[] = inc/views_adjuntos_filter_handler_filter.inc

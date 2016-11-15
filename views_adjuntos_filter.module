@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * Implements hook_enable().
+ *
+ * Force late execution of this module.
+ */
+function views_adjuntos_filter_enable() {
+    db_update('system')
+    ->fields(array('weight' => 200))
+    ->condition('type', 'module')
+    ->condition('name', 'views_adjuntos_filter')
+    ->execute();
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function views_adjuntos_filter_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'views_adjuntos_filter') . '/inc',
+  );
+}
+
+/**
+ * Implements hook_views_data().
+ */
+function views_adjuntos_filter_views_data() {
+  $data = array();
+
+  $data['views']['adjuntos_filter'] = array(
+    'group' => t('Custom'),
+    'title' => t('¿Tiene documento adjunto?'),
+    'help' => t('Allows to filter content with attached documents or without them.'),
+    'filter' => array(
+      'path' => drupal_get_path('module', 'views_adjuntos_filter') . '/inc',
+      'handler' => 'views_adjuntos_filter_handler_filter',
+    )
+  );
+
+  return $data;
+}
