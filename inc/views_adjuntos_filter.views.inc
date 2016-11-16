@@ -18,11 +18,11 @@ function views_adjuntos_filter_views_query_alter(&$view, &$query) {
     if ($has_doc_attached == 0) { // No.
 
       // Select desired method.
-      $method = 1;
+      $method = 2;
 
       if ($method == 1) {
 
-        /**** METHOD 1: initial version ****/
+        /**** METHOD 1: two queries ****/
   
         // Subquery.
         $subquery_result = db_query('SELECT distinct(d.entity_id) FROM {field_data_field_documentos_adjuntos} d where d.deleted=0 and d.delta=0');
@@ -37,7 +37,7 @@ function views_adjuntos_filter_views_query_alter(&$view, &$query) {
       }
       else if ($method == 2) {
 
-        /**** METHOD 2: direct subquery  ****/
+        /**** METHOD 2: direct subquery (better)  ****/
   
         // Subquery.
         $subquery = 'SELECT distinct(d.entity_id) FROM {field_data_field_documentos_adjuntos} d where d.deleted=0 and d.delta=0'; 
