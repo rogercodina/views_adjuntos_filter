@@ -18,7 +18,7 @@ function views_adjuntos_filter_views_query_alter(&$view, &$query) {
     if ($has_doc_attached == 0) { // No.
 
       // Subquery.
-      $subquery_result = db_query('SELECT distinct(d.entity_id) FROM {field_data_field_documentos_adjuntos} d where deleted=0');
+      $subquery_result = db_query('SELECT distinct(d.entity_id) FROM {field_data_field_documentos_adjuntos} d where d.deleted=0 and d.delta=0');
       $result = array();
       foreach ($subquery_result as $record) {
         $result[] = $record->entity_id;
