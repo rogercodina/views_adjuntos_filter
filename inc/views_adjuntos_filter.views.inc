@@ -17,35 +17,16 @@ function views_adjuntos_filter_views_query_alter(&$view, &$query) {
 
     if ($has_doc_attached == 0) { // No.
 
-      // Select desired method.
-      $method = 2;
-
-      if ($method == 1) {
-
-        /**** METHOD 1: two queries ****/
-  
-        // Subquery.
-        $subquery_result = db_query('SELECT distinct(d.entity_id) FROM {field_data_field_documentos_adjuntos} d where d.deleted=0 and d.delta=0');
-        $result = array();
-        foreach ($subquery_result as $record) {
-          $result[] = $record->entity_id;
-        }
-        $in_values = implode(',', $result);
-  
-        // Query alteration.      
-        $query->add_where_expression(1, "node.nid NOT IN(:in) ", array(':in' => $in_values));
+      $subquery_result = db_query('SELECT distinct(d.entity_id) FROM {field_data_field_documentos_adjuntos} d where d.deleted=0 and d.delta=0');
+      $result = array();
+      foreach ($subquery_result as $record) {
+        $result[] = $record->entity_id;
       }
-      else if ($method == 2) {
+      //$in_values = implode(',', $result);
 
-        /**** METHOD 2: direct subquery (better)  ****/
-  
-        // Subquery.
-        $subquery = 'SELECT distinct(d.entity_id) FROM {field_data_field_documentos_adjuntos} d where d.deleted=0 and d.delta=0'; 
-
-        // Query alteration.
-        $query->add_where_expression(1, "node.nid NOT IN(:in) ", array(':in' => $subquery));
-      }
-
+      $group_and = db_or();
+      $group_and->condition('node.nid', $result, 'NOT IN');
+      $query->add_where(1, $group_and);
     }
     else if ($has_doc_attached == 1) { // Yes.
 
